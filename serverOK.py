@@ -1,30 +1,33 @@
 from ping3 import verbose_ping
-import traceback
 import os
 import time
+import hostManagement
 checkMode=""
-
+activeHosts=[]
 def mainLoop():
-    os.system('cls||clear')
-    print("###### Welkom bij de checkonator ######")
-    print("Kies een van de onderstaande opties:")
-    print("1. Target hosts beheren.")
-    print("2. Checkmodus beheren.")
-    print("q. Het project afsluiten.")
-    print("")
-    keuze=input("Geef keuze op: ")
+    print(activeHosts)
+    stop_Program=False
+    while stop_Program == False:
+        os.system('cls||clear')
+        print("###### Welkom bij de checkonator ######")
+        print("Kies een van de onderstaande opties:")
+        print("1. Target hosts beheren.")
+        print("2. Checkmodus beheren.")
+        print("q. Het project afsluiten.")
+        print("")
+        keuze=input("Geef keuze op: ")
 
-    match keuze:
-        case "1":
-            manageHosts()
-        case "2":
-            manageCheckMode()
-        case "q":
-            quit()
-        case _:
-            print("Optie niet gevonden")
-            time.sleep(0.5)
-            mainLoop()
+        match keuze:
+            case "1":
+                manageHosts()
+            case "2":
+                manageCheckMode()
+            case "q":
+                stop_Program=True
+            case _:
+                print("Optie niet gevonden")
+                time.sleep(0.5)
+                mainLoop()
 
 def manageHosts():
     os.system('cls||clear')
@@ -39,13 +42,17 @@ def manageHosts():
 
     match keuze:
         case "1":
-            manageHosts()
+            hostManagement.addHost()
+        case "2":
+            hostManagement.removeHost()
+        case "3":
+            hostManagement.showHostsInteractive()
         case "q":
             mainLoop()
         case _:
             print("Optie niet gevonden")
             time.sleep(0.5)
-            manageHosts()
+    manageHosts()
 
 def manageCheckMode():
     os.system('cls||clear')
@@ -70,9 +77,6 @@ def manageCheckMode():
             print("Optie niet gevonden")
             time.sleep(0.5)
             manageCheckMode()
-    mainLoop()
-
-
 
 if __name__ == "__main__":
     mainLoop()
