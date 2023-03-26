@@ -1,82 +1,88 @@
-from ping3 import verbose_ping
 import os
 import time
 import hostManagement
+import checks
+
 checkMode=""
-activeHosts=[]
 def mainLoop():
-    print(activeHosts)
-    stop_Program=False
-    while stop_Program == False:
+    quitProgram=False
+    while quitProgram != True:
         os.system('cls||clear')
         print("###### Welkom bij de checkonator ######")
         print("Kies een van de onderstaande opties:")
         print("1. Target hosts beheren.")
         print("2. Checkmodus beheren.")
+        print("3. Voer checks uit.")
         print("q. Het project afsluiten.")
         print("")
         keuze=input("Geef keuze op: ")
-
         match keuze:
             case "1":
                 manageHosts()
             case "2":
                 manageCheckMode()
+            case "3":
+                checks.performChecks()
             case "q":
-                stop_Program=True
+                quitProgram= True
             case _:
                 print("Optie niet gevonden")
                 time.sleep(0.5)
-                mainLoop()
 
 def manageHosts():
-    os.system('cls||clear')
-    print("###### Beheer van hosts ######")
-    print("Kies een van de onderstaande opties:")
-    print("1. Host toevoegen.")
-    print("2. Host verwijderen.")
-    print("3. Hosts weergeven.")
-    print("q. terug naar hoofdmenu")
-    print("")
-    keuze=input("Geef keuze op: ")
+    quitHosts=False
+    while quitHosts != True:
+        os.system('cls||clear')
+        print("###### Beheer van hosts ######")
+        print("Kies een van de onderstaande opties:")
+        print("1. Host toevoegen.")
+        print("2. Host verwijderen.")
+        print("3. Hosts weergeven.")
+        print("q. terug naar hoofdmenu")
+        print("")
+        keuze=input("Geef keuze op: ")
 
-    match keuze:
-        case "1":
-            hostManagement.addHost()
-        case "2":
-            hostManagement.removeHost()
-        case "3":
-            hostManagement.showHostsInteractive()
-        case "q":
-            mainLoop()
-        case _:
-            print("Optie niet gevonden")
-            time.sleep(0.5)
-    manageHosts()
+        match keuze:
+            case "1":
+                hostManagement.addHost()
+            case "2":
+                hostManagement.removeHost()
+            case "3":
+                hostManagement.showHostsInteractive()
+            case "q":
+                quitHosts=True
+            case _:
+                print("Optie niet gevonden")
+                time.sleep(0.5)
+        
 
 def manageCheckMode():
-    os.system('cls||clear')
-    print("###### Beheer van checkmodus ######")
-    print("Welke check wilt u activeren ?: ")
-    print("1. ping")
-    print("2. ping.")
-    print("3. ping <-- beste keuze :)")
-    print("q. terug naar hoofdmenu")
-    print("")
-    keuze=input("Geef keuze op: ")
-    match keuze:
-        case "1":
-            checkMode="ping"
-        case "2":
-            checkMode="ping"
-        case "3":
-            checkMode="ping"
-        case "q":
-            mainLoop()
-        case _:
-            print("Optie niet gevonden")
-            time.sleep(0.5)
-            manageCheckMode()
+    quitChecks=False
+    while quitChecks != True:
+        os.system('cls||clear')
+        print("###### Beheer van checkmodus ######")
+        print(f"Actieve modus: {checks.getCheckmode()}")
+        print("Welke check wilt u activeren ?: ")
+        print("1. ping")
+        print("2. ping.")
+        print("3. ping <-- beste keuze :)")
+        print("q. terug naar hoofdmenu")
+        print("")
+        keuze=input("Geef keuze op: ")
+        match keuze:
+            case "1":
+                checks.toggleCheck("ping")
+            case "2":
+                checks.toggleCheck("ping")
+            case "3":
+                checks.toggleCheck("ping")
+            case "q":
+                quitChecks=True
+            case _:
+                print("Optie niet gevonden")
+                time.sleep(0.5)
 
 if __name__ == "__main__":
+    hostManagement.loadHosts()
+    checks.loadChecks()
     mainLoop()
