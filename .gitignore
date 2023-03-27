@@ -1,2 +1,6 @@
 /venv
 /__pycache__/
+checks.txt
+hosts.txt
+results.html
+results.txt
