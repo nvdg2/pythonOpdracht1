@@ -13,6 +13,7 @@ def mainLoop():
         print("1. Target hosts beheren.")
         print("2. Checkmodus beheren.")
         print("3. Voer checks uit.")
+        print("4. Resultaten naar html omzetten.")
         print("q. Het project afsluiten.")
         print("")
         keuze=input("Geef keuze op: ")
@@ -23,6 +24,8 @@ def mainLoop():
                 manageCheckMode()
             case "3":
                 checks.performChecks()
+            case "4":
+                checks.maakHtmlVanResultaten()                
             case "q":
                 quitProgram= True
             case _:
@@ -84,5 +87,6 @@ def manageCheckMode():
 
 if __name__ == "__main__":
     hostManagement.loadHosts()
-    checks.loadChecks()
+    checks.loadCheckModes()
+    checks.loadResults()
     mainLoop()

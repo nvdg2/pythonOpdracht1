@@ -3,7 +3,7 @@ import traceback
 import time
 import hostManagement
 activeCheckModes=[]
-
+checkResults=[]
 def getCheckmode():
     return activeCheckModes
 
@@ -13,7 +13,7 @@ def toggleCheck(input):
         del activeCheckModes[index] 
     except ValueError:
         activeCheckModes.append(f"{input}")
-    writeChecks()
+    writeCheckModes()
 
 def performChecks():
     if len(activeCheckModes) !=0:
@@ -22,17 +22,30 @@ def performChecks():
                 case "ping":
                     executePing()
         input("Druk op enter om verder te gaan")
+        maakHtmlVanResultaten
     else:
         print("Geen checkmode aangegeven")
         time.sleep(0.5)
 
+
         
 def executePing():
     for host in hostManagement.getActiveHosts():
-        ping3.verbose_ping(f"{host}")
+        aantalPingsSuccesvol=0
+        for i in range(0,4):
+            delay = ping3.ping(f"{host}")
+            if type(delay)!=bool:
+                aantalPingsSuccesvol+=1
+        checkResults.append({
+            "mode": "ping",
+            "pingReceived": aantalPingsSuccesvol,
+            "positive": aantalPingsSuccesvol > 2
+        })
+    writeResults()
+    maakHtmlVanResultaten()
         
 
-def writeChecks():
+def writeCheckModes():
     with open("checks.txt","w") as checks:
         temp = open("checks.txt","w")
         temp.close()
@@ -42,7 +55,7 @@ def writeChecks():
             else:
                 checks.write(f",{activeCheckModes[i]}")
 
-def loadChecks():
+def loadCheckModes():
     global activeCheckModes
     try:
         with open("checks.txt","r") as checks:
@@ -55,3 +68,53 @@ def loadChecks():
     except FileNotFoundError:
         hosts = open("checks.txt","w")
         hosts.close()
+
+def loadResults():
+    global checkResults
+    try:
+        with open("results.txt","r") as results:
+            while True:
+                line = results.readline()
+                if len(line)==0:
+                    break
+                else:
+                    checkResults.append(line.replace("\n",""))
+
+    except FileNotFoundError:
+        hosts = open("checks.txt","w")
+        hosts.close()
+
+def writeResults():
+    with open("results.txt","w") as results:
+        temp = open("results.txt","w")
+        temp.close()
+        for i in range(0,len(checkResults)):
+            if i == 0:
+                results.write(f"{checkResults[i]}")
+            else:
+                results.write(f"\n{checkResults[i]}")
+
+def maakHtmlVanResultaten():
+    try:
+        tekst=[]
+        with open("template.html","r") as template:
+            while True:
+                line = template.readline()
+                if len(line)==0:
+                    break
+                tekst.append(line)
+            target = open("results.html","w")
+            target.writelines(tekst)
+            target.close()
+
+        temp = open("results.html","w")
+        temp.close()
+        with open("results.html","w") as results:
+            for i in range(0,len(tekst)):
+                if tekst[i] == "    </ul>\n":
+                    for j in range(len(checkResults)-1,-1,-1):
+                        results.writelines(f"<li>{checkResults[j]}</li>\n")
+                results.write(tekst[i])         
+
+    except FileNotFoundError:
+        print("Geen template gevonden")
