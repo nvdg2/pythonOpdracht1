@@ -5,27 +5,33 @@ import json
 
 activeCheckModes=[]
 checkResults=[]
+possibleChecks=["ping"]
 
 def getCheckmode():
     return activeCheckModes
 
 def toggleCheck(input):
-    """This function is used to toggle a checkmode"""
-    try:
-        index =  activeCheckModes.index(f"{input}")
-        del activeCheckModes[index] 
-    except ValueError:
-        activeCheckModes.append(f"{input}")
-    writeCheckModes()
+    if input in possibleChecks:
+        """This function is used to toggle a checkmode"""
+        try:
+            index =  activeCheckModes.index(f"{input}")
+            del activeCheckModes[index] 
+        except ValueError:
+            activeCheckModes.append(f"{input}")
+        writeCheckModes()
+    else:
+        print("check nog niet geïmplementeerd")
+        time.sleep(0.5)
 
 def performChecks():
     """This function is used to perform the checks"""
     if len(activeCheckModes) != 0:
+        print("Checks worden uitgevoerd")
         for check in activeCheckModes:
             match check:
                 case "ping":
                     executePing()
-        input("Druk op enter om verder te gaan")
+
         maakHtmlVanResultaten
     else:
         print("Geen checkmode aangegeven")

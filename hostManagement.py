@@ -4,30 +4,68 @@ import os
 import json
 activeHosts=[]
 
-def addHost():
-    """This function is used to add a host to the list of active hosts"""
-    hostAdres=input("Geef ip-adres van host op: ")
-    activeHosts.append(hostAdres)
-    writeHosts()
-
-def removeHost():
-    """This function is used to remove a host from the list of active hosts"""
-    os.system("cls||clear")
-    if (len(activeHosts)!=0):
-        showActiveHosts()
-        numberOfHost=int(input("Geef nummer van host op: "))
+    
+def addHost(hostAdres=""):
+    if(hostAdres!=""):
+        """This function is used to add automaticly a host from the list of active hosts"""
+        valid = checkInputIP(hostAdres)
+        if not valid:
+            print("Geen geldig ip")
+            exit()
         try:
-            
-            del activeHosts[numberOfHost-1]
-        except IndexError:
-            print("Nummer kwam niet voor in lijst.")
-            time.sleep(0.5)
+            if hostAdres not in activeHosts:
+                activeHosts.append(hostAdres)
         except:
             traceback.print_exc()
         writeHosts()
     else:
-        print("Geen hosts in lijst.")
-        time.sleep(0.5)
+        hostAdres=input("Geef ip-adres van host op: ")
+        valid = checkInputIP(hostAdres)
+        if not valid:
+            print("Geen geldig ip")
+            time.sleep(0.5)
+        else:
+            if hostAdres not in activeHosts:
+                activeHosts.append(hostAdres)
+            writeHosts()
+
+def checkInputIP(inputIP):
+    segments=inputIP.split(".")
+    validIp=True
+    try:
+        for segment in segments:
+            if int(segment) < 0 or int(segment) > 255:
+                validIp=False
+        return validIp
+    except:
+        return False
+
+def removeHost(hostAdres=""):
+    if hostAdres!="":
+        """This function is used to remove a host automaticly from the list of active hosts"""
+        try:
+            activeHosts.remove(hostAdres)
+        except:
+            traceback.print_exc()
+        writeHosts()
+
+    else:
+        """This function is used to remove a host from the list of active hosts"""
+        os.system("cls||clear")
+        if (len(activeHosts)!=0):
+            showActiveHosts()
+            numberOfHost=int(input("Geef nummer van host op: "))
+            try:
+                del activeHosts[numberOfHost-1]
+                writeHosts()
+            except IndexError:
+                print("Nummer kwam niet voor in lijst.")
+                time.sleep(0.5)
+            except:
+                traceback.print_exc()
+        else:
+            print("Geen hosts in lijst.")
+            time.sleep(0.5)
 
 def showActiveHosts():
     """This function is used to show the active hosts"""
