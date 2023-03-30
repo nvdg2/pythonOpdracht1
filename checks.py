@@ -1,9 +1,11 @@
 import ping3
-import traceback
 import time
 import hostManagement
+import json
+
 activeCheckModes=[]
 checkResults=[]
+
 def getCheckmode():
     return activeCheckModes
 
@@ -18,7 +20,7 @@ def toggleCheck(input):
 
 def performChecks():
     """This function is used to perform the checks"""
-    if len(activeCheckModes) !=0:
+    if len(activeCheckModes) != 0:
         for check in activeCheckModes:
             match check:
                 case "ping":
@@ -28,7 +30,6 @@ def performChecks():
     else:
         print("Geen checkmode aangegeven")
         time.sleep(0.5)
-
 
         
 def executePing():
@@ -50,56 +51,35 @@ def executePing():
 
 def writeCheckModes():
     """This function is used to write the active checkmodes to a file"""
-    with open("checks.txt","w") as checks:
-        temp = open("checks.txt","w")
-        temp.close()
-        for i in range(0,len(activeCheckModes)):
-            if i == 0:
-                checks.write(f"{activeCheckModes[i]}")
-            else:
-                checks.write(f",{activeCheckModes[i]}")
+    with open("checks.json","w") as checks:
+        json.dump(activeCheckModes, checks)
 
 def loadCheckModes():
     """This function is used to load the active checkmodes from a file"""
     global activeCheckModes
     try:
-        with open("checks.txt","r") as checks:
-            while True:
-                line = checks.readline()
-                if len(line)==0:
-                    break
-                else:
-                    activeCheckModes =line.split(",")
+        with open("checks.json","r") as checks:
+            activeCheckModes = json.load(checks)
     except FileNotFoundError:
-        hosts = open("checks.txt","w")
-        hosts.close()
+        activeCheckModes = []
+    except json.decoder.JSONDecodeError:
+        activeCheckModes = []
 
 def loadResults():
     """This function is used to load the results from a file"""
     global checkResults
     try:
-        with open("results.txt","r") as results:
-            while True:
-                line = results.readline()
-                if len(line)==0:
-                    break
-                else:
-                    checkResults.append(line.replace("\n",""))
-
+        with open("results.json","r") as results:
+            checkResults = json.load(results)
     except FileNotFoundError:
-        hosts = open("checks.txt","w")
-        hosts.close()
+        checkResults=[]
+    except json.decoder.JSONDecodeError:
+        checkResults=[]
 
 def writeResults():
     """This function is used to write the results to a file"""
-    with open("results.txt","w") as results:
-        temp = open("results.txt","w")
-        temp.close()
-        for i in range(0,len(checkResults)):
-            if i == 0:
-                results.write(f"{checkResults[i]}")
-            else:
-                results.write(f"\n{checkResults[i]}")
+    with open("results.json", "w") as results:
+        json.dump(checkResults, results)
 
 def maakHtmlVanResultaten():
     """This function is used to create a html file with the results included"""
