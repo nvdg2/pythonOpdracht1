@@ -8,6 +8,7 @@ def getCheckmode():
     return activeCheckModes
 
 def toggleCheck(input):
+    """This function is used to toggle a checkmode"""
     try:
         index =  activeCheckModes.index(f"{input}")
         del activeCheckModes[index] 
@@ -16,6 +17,7 @@ def toggleCheck(input):
     writeCheckModes()
 
 def performChecks():
+    """This function is used to perform the checks"""
     if len(activeCheckModes) !=0:
         for check in activeCheckModes:
             match check:
@@ -30,6 +32,7 @@ def performChecks():
 
         
 def executePing():
+    """This function is used to execute the ping check"""
     for host in hostManagement.getActiveHosts():
         aantalPingsSuccesvol=0
         for i in range(0,4):
@@ -46,6 +49,7 @@ def executePing():
         
 
 def writeCheckModes():
+    """This function is used to write the active checkmodes to a file"""
     with open("checks.txt","w") as checks:
         temp = open("checks.txt","w")
         temp.close()
@@ -56,6 +60,7 @@ def writeCheckModes():
                 checks.write(f",{activeCheckModes[i]}")
 
 def loadCheckModes():
+    """This function is used to load the active checkmodes from a file"""
     global activeCheckModes
     try:
         with open("checks.txt","r") as checks:
@@ -70,6 +75,7 @@ def loadCheckModes():
         hosts.close()
 
 def loadResults():
+    """This function is used to load the results from a file"""
     global checkResults
     try:
         with open("results.txt","r") as results:
@@ -85,6 +91,7 @@ def loadResults():
         hosts.close()
 
 def writeResults():
+    """This function is used to write the results to a file"""
     with open("results.txt","w") as results:
         temp = open("results.txt","w")
         temp.close()
@@ -95,6 +102,7 @@ def writeResults():
                 results.write(f"\n{checkResults[i]}")
 
 def maakHtmlVanResultaten():
+    """This function is used to create a html file with the results included"""
     try:
         tekst=[]
         with open("template.html","r") as template:

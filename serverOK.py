@@ -2,9 +2,12 @@ import os
 import time
 import hostManagement
 import checks
+import sys
+
 
 checkMode=""
 def mainLoop():
+    """This function is used to start the main loop"""
     quitProgram=False
     while quitProgram != True:
         os.system('cls||clear')
@@ -13,7 +16,6 @@ def mainLoop():
         print("1. Target hosts beheren.")
         print("2. Checkmodus beheren.")
         print("3. Voer checks uit.")
-        print("4. Resultaten naar html omzetten.")
         print("q. Het project afsluiten.")
         print("")
         keuze=input("Geef keuze op: ")
@@ -23,9 +25,7 @@ def mainLoop():
             case "2":
                 manageCheckMode()
             case "3":
-                checks.performChecks()
-            case "4":
-                checks.maakHtmlVanResultaten()                
+                checks.performChecks()          
             case "q":
                 quitProgram= True
             case _:
@@ -33,6 +33,7 @@ def mainLoop():
                 time.sleep(0.5)
 
 def manageHosts():
+    """This function is used to manage the hosts"""
     quitHosts=False
     while quitHosts != True:
         os.system('cls||clear')
@@ -60,6 +61,8 @@ def manageHosts():
         
 
 def manageCheckMode():
+    """This function is used to manage the checkmode"""
+    
     quitChecks=False
     while quitChecks != True:
         os.system('cls||clear')
@@ -85,8 +88,16 @@ def manageCheckMode():
                 print("Optie niet gevonden")
                 time.sleep(0.5)
 
+def automatedMain():
+    """This function is used for automated testing"""
+    print("lezdgtezdhzeg")
+
 if __name__ == "__main__":
+    """This function is used to start the program"""
     hostManagement.loadHosts()
     checks.loadCheckModes()
     checks.loadResults()
-    mainLoop()
+    if len(sys.argv) == 1:
+        mainLoop()
+    else:
+        automatedMain()
