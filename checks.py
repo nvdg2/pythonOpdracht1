@@ -40,16 +40,16 @@ def performChecks():
 def executePing():
     """This function is used to execute the ping check"""
     for host in hostManagement.getActiveHosts():
-        aantalPingsSuccesvol=0
+        succesfulPings=0
         for i in range(0,4):
             delay = ping3.ping(f"{host}")
             if type(delay)!=bool:
-                aantalPingsSuccesvol+=1
+                succesfulPings+=1
         checkResults.append({
             "mode": "ping",
             "host": host,
-            "pingReceived": aantalPingsSuccesvol,
-            "positive": aantalPingsSuccesvol > 2
+            "pingReceived": succesfulPings,
+            "positive": succesfulPings > 2
         })
     writeResults()
         
@@ -89,24 +89,24 @@ def writeResults():
 def createHTMLResults():
     """This function is used to create a html file with the results included"""
     try:
-        tekst=[]
+        text=[]
         with open("template.html","r") as template:
             while True:
                 line = template.readline()
                 if len(line)==0:
                     break
-                tekst.append(line)
+                text.append(line)
             target = open("results.html","w")
-            target.writelines(tekst)
+            target.writelines(text)
             target.close()
 
         temp = open("results.html","w")
         temp.close()
         with open("results.html","w") as results:
-            for i in range(0,len(tekst)):
-                if tekst[i] == "    </ul>\n":
+            for i in range(0,len(text)):
+                if text[i] == "    </ul>\n":
                     for j in range(len(checkResults)-1,-1,-1):
                         results.writelines(f"<li>{checkResults[j]}</li>\n")
-                results.write(tekst[i])         
+                results.write(text[i])         
     except FileNotFoundError:
         print("Geen template gevonden")

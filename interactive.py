@@ -27,8 +27,8 @@ def mainLoop():
         table.add_row("q", "Het project afsluiten.")
         console.print(table)
         print("")
-        keuze=input("Geef keuze op: ")
-        match keuze:
+        choice=input("Geef keuze op: ")
+        match choice:
             case "1":
                 manageHosts()
             case "2":
@@ -57,9 +57,9 @@ def manageHosts():
         table.add_row("q", "Terug naar hoofdmenu")
         console.print(table)
         print("")
-        keuze=input("Geef keuze op: ")
+        choice=input("Geef keuze op: ")
 
-        match keuze:
+        match choice:
             case "1":
                 hostManagement.addHost()
             case "2":
@@ -88,8 +88,8 @@ def manageCheckMode():
         table.add_row("3", "ping <-- beste keuze :)")
         table.add_row("q", "terug naar hoofdmenu")
         console.print(table)
-        keuze=input("Geef keuze op: ")
-        match keuze:
+        choice=input("Geef keuze op: ")
+        match choice:
             case "1":
                 checks.toggleCheck("ping")
             case "2":
