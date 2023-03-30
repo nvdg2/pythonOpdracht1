@@ -31,8 +31,7 @@ def performChecks():
             match check:
                 case "ping":
                     executePing()
-
-        maakHtmlVanResultaten
+        createHTMLResults()
     else:
         print("Geen checkmode aangegeven")
         time.sleep(0.5)
@@ -48,11 +47,11 @@ def executePing():
                 aantalPingsSuccesvol+=1
         checkResults.append({
             "mode": "ping",
+            "host": host,
             "pingReceived": aantalPingsSuccesvol,
             "positive": aantalPingsSuccesvol > 2
         })
     writeResults()
-    maakHtmlVanResultaten()
         
 
 def writeCheckModes():
@@ -87,7 +86,7 @@ def writeResults():
     with open("results.json", "w") as results:
         json.dump(checkResults, results)
 
-def maakHtmlVanResultaten():
+def createHTMLResults():
     """This function is used to create a html file with the results included"""
     try:
         tekst=[]
@@ -109,6 +108,5 @@ def maakHtmlVanResultaten():
                     for j in range(len(checkResults)-1,-1,-1):
                         results.writelines(f"<li>{checkResults[j]}</li>\n")
                 results.write(tekst[i])         
-
     except FileNotFoundError:
         print("Geen template gevonden")

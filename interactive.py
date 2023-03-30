@@ -62,7 +62,6 @@ def manageHosts():
 
 def manageCheckMode():
     """This function is used to manage the checkmode"""
-    
     quitChecks=False
     while quitChecks != True:
         os.system('cls||clear')
@@ -87,10 +86,3 @@ def manageCheckMode():
             case _:
                 print("Optie niet gevonden")
                 time.sleep(0.5)
-
-def automatedMain():
-    """This function is used for automated testing"""
-    print("lezdgtezdhzeg")
-
-if __name__ == "__main__":
-    """This function is used to start the program"""
