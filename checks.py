@@ -43,7 +43,7 @@ def executePing():
         succesfulPings=0
         for i in range(0,4):
             delay = ping3.ping(f"{host}")
-            if type(delay)!=bool:
+            if type(delay)!=bool and delay!=None:
                 succesfulPings+=1
         checkResults.append({
             "mode": "ping",
